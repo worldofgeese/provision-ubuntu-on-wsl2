@@ -1,5 +1,29 @@
 ---
 
+#https://phoenixnap.com/kb/ansible-check-if-file-exists
+if /etc/ssh/sshd_config
+if switched-to-port-2222
+
+- name: "sshd - check config exists"
+  stat:
+    path: /etc/ssh/sshd_config
+  register: sshd_config
+
+- name: "SSHD EXISTS?"
+  debug:
+    msg: sshd_config.stat.exists
+
+- name: "Searching for a String"
+  shell: "grep -i 'Port 2222' /etc/ssh/sshd_config"
+  register: port-2222
+  become: true
+
+- name: "String present in the file"
+  debug: msg="port-2222"
+  when: port-2222 is changed
+
+
+
 - name: "sshd - update apt cache"
   apt:
     update_cache: yes
