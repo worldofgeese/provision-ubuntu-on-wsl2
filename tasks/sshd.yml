@@ -1,0 +1,60 @@
+---
+
+- name: "sshd - update apt cache"
+  apt:
+    update_cache: yes
+  become: true
+
+- name: "sshd - install latest via apt"
+  apt:
+    state: latest
+    name:
+      - openssh-server
+  become: true
+
+- name: "sshd - configure on port 2222"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    insertafter: "^#Port 22" 
+    line: "Port 2222"
+    firstmatch: true
+    state: present
+  become: true
+  register: switched-to-port-2222
+
+- name: "sshd - regen host keys"
+    block:
+      # https://www.cyberciti.biz/faq/howto-regenerate-openssh-host-keys/
+      - name: "find all host keys"
+        find:
+          paths: /etc/ssh
+          patterns: 'ssh_host_*'
+        register: files_to_delete
+
+      - name: "Delete host keys"
+        file:
+          path: "{{ item.path }}"
+          state: absent
+        with_items: "{{ files_to_delete.files }}"
+
+      - name: dpkg-reconfigure -f noninteractive openssh-server
+        command:
+          cmd: dpkg-reconfigure -f noninteractive openssh-server
+          creates: /etc/apt/apt.conf.d/20auto-upgrades
+
+    when: switched-to-port-2222 is changed
+    become: true
+
+
+## Put in block with an if
+#  - name: Ansible delete files older than 5 days example
+#    find:
+#      paths: /Users/dnpmacpro/Documents/Ansible
+#      patterns: '*.log'
+#    register: files_to_delete
+#
+#  - name: Ansible remove files older than a date example
+#    file:
+#      path: "{{ item.path }}"
+#      state: absent
+#    with_items: "{{ files_to_delete.files }}"
