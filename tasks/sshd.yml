@@ -13,27 +13,21 @@ if switched-to-port-2222
   debug:
     msg: sshd_config.stat.exists
 
-- name: "Searching for a String"
+- name: "Searching for Port 2222"
   shell: "grep -i 'Port 2222' /etc/ssh/sshd_config"
   register: port-2222
   become: true
 
-- name: "String present in the file"
-  debug: msg="port-2222"
+- name: "is Port 2222 present in the file"
+  debug: msg="Port 2222 is defined"
   when: port-2222 is changed
-
-
-
-- name: "sshd - update apt cache"
-  apt:
-    update_cache: yes
-  become: true
 
 - name: "sshd - install latest via apt"
   apt:
     state: latest
     name:
       - openssh-server
+    update_cache: yes
   become: true
 
 - name: "sshd - configure on port 2222"
