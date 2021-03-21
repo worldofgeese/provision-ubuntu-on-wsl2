@@ -1,8 +1,8 @@
 ---
-install_aws_vault: no
-install_rbenv: no
-install_tfenv: no
-install_yarn: no
-configure_sshd: no
-install_xubuntu_x2go: no
+install_aws_vault: yes
+install_rbenv: yes
+install_tfenv: yes
+install_yarn: yes
+configure_sshd: yes
+install_xubuntu_x2go: yes
 install_jetbrains_toolbox: yes
