@@ -1,0 +1,12 @@
+---
+
+- name: "Install xubuntu-core and x2go server"
+  apt:
+    state: latest
+    name:
+      - xubuntu-core
+      - x2goserver
+      - x2goserver-xsession
+    update_cache: yes
+    cache_valid_time: 3600
+  become: true

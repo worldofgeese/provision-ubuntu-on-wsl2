@@ -60,6 +60,9 @@
     - include_tasks: tasks/sshd.yml
       when: configure_sshd
 
+    - include_tasks: tasks/xubuntu-x2go.yml
+      when: install_xubuntu_x2go
+
   post_tasks:
     - name: "apt autoclean && autoremove"
       apt:

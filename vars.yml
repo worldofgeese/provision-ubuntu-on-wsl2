@@ -4,3 +4,4 @@ install_rbenv: no
 install_tfenv: no
 install_yarn: no
 configure_sshd: no
+install_xubuntu_x2go: no
