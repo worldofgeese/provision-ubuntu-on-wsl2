@@ -57,6 +57,9 @@
     - include_tasks: tasks/rbenv.yml
       when: install_rbenv
 
+    - include_tasks: tasks/sshd.yml
+      when: configure_sshd
+
   post_tasks:
     - name: "apt autoclean && autoremove"
       apt:

@@ -1,34 +1,37 @@
 ---
 
-#https://phoenixnap.com/kb/ansible-check-if-file-exists
-if /etc/ssh/sshd_config
-if switched-to-port-2222
-
-- name: "sshd - check config exists"
-  stat:
-    path: /etc/ssh/sshd_config
-  register: sshd_config
-
-- name: "SSHD EXISTS?"
-  debug:
-    msg: sshd_config.stat.exists
-
-- name: "Searching for Port 2222"
-  shell: "grep -i 'Port 2222' /etc/ssh/sshd_config"
-  register: port-2222
+- name: "sshd - Search for Port 2222 in sshd_config"
+  shell: "grep -s -i '^Port 2222' /etc/ssh/sshd_config"
+  register: port2222
+  ignore_errors: true
   become: true
 
-- name: "is Port 2222 present in the file"
-  debug: msg="Port 2222 is defined"
-  when: port-2222 is changed
+- name: "sshd - rc"
+  debug:
+    var: port2222.rc
 
-- name: "sshd - install latest via apt"
-  apt:
-    state: latest
-    name:
-      - openssh-server
-    update_cache: yes
-    cache_valid_time: 3600
+- name: "sshd - re-install to fix host keys"
+  # https://derkoe.dev/blog/development-environment-in-wsl2/
+  block:
+
+  - name: "sshd - uninstall purge"
+    apt:
+      state: absent
+      purge: true
+      name:
+        - openssh-server
+    become: true
+
+  - name: "sshd - reinstall latest"
+    apt:
+      state: latest
+      name:
+        - openssh-server
+      update_cache: yes
+      cache_valid_time: 3600
+    become: true
+
+  when: port2222.rc != 0
   become: true
 
 - name: "sshd - configure on port 2222"
@@ -39,41 +42,12 @@ if switched-to-port-2222
     firstmatch: true
     state: present
   become: true
-  register: switched-to-port-2222
 
-- name: "sshd - regen host keys"
-    block:
-      # https://www.cyberciti.biz/faq/howto-regenerate-openssh-host-keys/
-      - name: "find all host keys"
-        find:
-          paths: /etc/ssh
-          patterns: 'ssh_host_*'
-        register: files_to_delete
+- name: "sshd - PasswordAuthentication to default"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication no'
+    line: "#PasswordAuthentication yes"
+  become: true
 
-      - name: "Delete host keys"
-        file:
-          path: "{{ item.path }}"
-          state: absent
-        with_items: "{{ files_to_delete.files }}"
-
-      - name: dpkg-reconfigure -f noninteractive openssh-server
-        command:
-          cmd: dpkg-reconfigure -f noninteractive openssh-server
-          creates: /etc/apt/apt.conf.d/20auto-upgrades
-
-    when: switched-to-port-2222 is changed
-    become: true
-
-
-## Put in block with an if
-#  - name: Ansible delete files older than 5 days example
-#    find:
-#      paths: /Users/dnpmacpro/Documents/Ansible
-#      patterns: '*.log'
-#    register: files_to_delete
-#
-#  - name: Ansible remove files older than a date example
-#    file:
-#      path: "{{ item.path }}"
-#      state: absent
-#    with_items: "{{ files_to_delete.files }}"
+  #TODO Autostart
