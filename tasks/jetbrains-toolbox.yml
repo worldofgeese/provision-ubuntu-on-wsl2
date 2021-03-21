@@ -1,0 +1,40 @@
+---
+
+- name: "jetbrains-toolbox - check installed"
+  stat:
+    path: "~/.local/share/JetBrains/Toolbox"
+  register: toolbox_dir
+
+- name: "jetbrains-toolbox install"
+  block:
+
+    - debug:
+        msg: "Installing Toolbox"
+
+    - name: "jetbrains-toolbox create ~/jbtemp"
+      file:
+        path: "~/jbtemp"
+        state: directory
+
+    - name: "jetbrains-toolbox download"
+      get_url:
+        url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.20.7940.tar.gz"
+        dest: "~/jbtemp/jetbrains-toolbox-1.20.7940.tar.gz"
+        checksum: "sha256:c156beff24fb6cb1cd5880c5faa9fb65d70dcb93ac7601217574d4e5c9aaad35"
+
+    - name: "jetbrains-toolbox extract"
+      unarchive:
+        src: "~/jbtemp/jetbrains-toolbox-1.20.7940.tar.gz"
+        dest: "~/jbtemp"
+        remote_src: true
+        creates: "~/jbtemp/jetbrains-toolbox-1.20.7940"
+
+    - name: "jetbrains-toolbox install"
+      command: "~/jbtemp/jetbrains-toolbox-1.20.7940/jetbrains-toolbox"
+
+    - name: "jetbrains-toolbox - rm temp dir"
+      file:
+        path: "~/jbtemp"
+        state: absent
+
+  when: not toolbox_dir.stat.exists

@@ -63,6 +63,9 @@
     - include_tasks: tasks/xubuntu-x2go.yml
       when: install_xubuntu_x2go
 
+    - include_tasks: tasks/jetbrains-toolbox.yml
+      when: install_jetbrains_toolbox
+
   post_tasks:
     - name: "apt autoclean && autoremove"
       apt:
