@@ -66,6 +66,9 @@
     - include_tasks: tasks/jetbrains-toolbox.yml
       when: install_jetbrains_toolbox
 
+    - include_tasks: tasks/net-core.yml
+      when: install_netcore
+
   post_tasks:
     - name: "apt autoclean && autoremove"
       apt:

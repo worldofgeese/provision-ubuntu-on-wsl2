@@ -6,3 +6,4 @@ install_yarn: yes
 configure_sshd: yes
 install_xubuntu_x2go: yes
 install_jetbrains_toolbox: yes
+install_netcore: yes

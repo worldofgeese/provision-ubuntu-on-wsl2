@@ -1,0 +1,26 @@
+---
+
+# https://docs.microsoft.com/en-gb/dotnet/core/install/linux-ubuntu
+
+- name: "net-core - Download MS product repository"
+  get_url:
+    url: https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+    dest: /tmp/packages-microsoft-prod.deb
+
+- name: "net-core - MS product repository"
+  apt: deb=/tmp/packages-microsoft-prod.deb
+  become: true
+
+- name: "net-core - HTTPS apt"
+  apt:
+    name: apt-transport-https
+    state: present
+    update_cache: no
+  become: true
+
+- name: "net-core - .NET Core SDK"
+  apt:
+    name: dotnet-sdk-3.1
+    state: present
+    update_cache: yes
+  become: true
