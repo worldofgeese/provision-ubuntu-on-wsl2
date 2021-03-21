@@ -36,6 +36,10 @@ Intended to be re-runnable (idempotent) to maintain and update when required.
 - [tfenv](tasks/tfenv.yml)
 - [aws vault](tasks/aws-vault.yml)
 - [rbenv](tasks/rbenv.yml)
+- [sshd](tasks/sshd.yml)
+- [xubuntu-core with x2go server](tasks/xubuntu-x2go.yml)
+- [Jetbrains Toolbox](tasks/jetbrains-toolbox.yml)
+- [.net core SDK](tasks/net-core.yml)
 
 
 ## Notes
