@@ -27,37 +27,15 @@
   tasks:
     - include_tasks: tasks/locale.yml
 
-    - name: "Install apt cmd line apps"
-      apt:
-        state: latest
-        name:
-          - awscli
-          - dos2unix
-          - gnupg
-          - golang
-          - graphviz
-          - jq
-          - libsqlite3-dev
-          - neofetch
-          - net-tools
-          - nmap
-          - silversearcher-ag
-          - tree
-          - unzip
-          - zip
-      become: true
-
-    - include_tasks: tasks/yarn.yml
-      when: install_yarn
-
-    - include_tasks: tasks/tfenv.yml
-      when: install_tfenv
+    # - name: "Install apt cmd line apps"
+    #   apt:
+    #     state: latest
+    #     name:
+    #       - unzip
+    #   become: true
 
     - include_tasks: tasks/aws-vault.yml
       when: install_aws_vault
-
-    - include_tasks: tasks/rbenv.yml
-      when: install_rbenv
 
   post_tasks:
     - name: "apt autoclean && autoremove"
@@ -65,9 +43,3 @@
         autoclean: yes
         autoremove: yes
       become: true
-
-  roles:
-    - role: stephdewit.nvm
-      nvm_version: 0.39.1
-      nvm_node_version: 14.18.2
-      become: false
