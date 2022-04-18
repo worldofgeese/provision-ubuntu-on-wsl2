@@ -30,7 +30,8 @@ sudo apt update && \
 3. `cd provision-ubuntu-on-wsl2`
 4. `ansible-galaxy install -r requirements.yml --force`
 5. `ansible-playbook playbook.yml -i inventory --ask-become-pass`
-6. Profit :smile:
+6. `exit` then open a new shell to make Nix available to your environment
+7. Profit :smile:
 
 ## What is Installed?
 
