@@ -21,10 +21,10 @@ Intended to be re-runnable (idempotent) to maintain and update when required.
 
 1. Install Ansible:
 ```
-sudo apt update
-sudo apt install software-properties-common
-sudo add-apt-repository --yes --update ppa:ansible/ansible
-sudo apt install ansible
+sudo apt update && \\
+  sudo apt install software-properties-common && \\
+  sudo add-apt-repository --yes --update ppa:ansible/ansible && \\ 
+  sudo apt install ansible && \\
 ```
 2. `git clone https://github.com/worldofgeese/provision-ubuntu-on-wsl2.git`
 3. `cd provision-ubuntu-on-wsl2`
