@@ -1,6 +1,9 @@
 ---
 - hosts: all
   connection: local
+      
+  roles:
+    - role: ableton.nix
 
   vars_files:
     - vars.yml
@@ -25,7 +28,7 @@
       become: true
 
   tasks:
-    - include_tasks: tasks/locale.yml
+    # - include_tasks: tasks/locale.yml
 
     # - name: "Install apt cmd line apps"
     #   apt:
@@ -34,8 +37,8 @@
     #       - unzip
     #   become: true
 
-    - include_tasks: tasks/aws-vault.yml
-      when: install_aws_vault
+    # - include_tasks: tasks/aws-vault.yml
+    #   when: install_aws_vault
 
   post_tasks:
     - name: "apt autoclean && autoremove"
