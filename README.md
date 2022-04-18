@@ -26,10 +26,11 @@ sudo apt update && \
   sudo add-apt-repository --yes --update ppa:ansible/ansible && \
   sudo apt install ansible
 ```
-2. `git clone https://github.com/worldofgeese/provision-ubuntu-on-wsl2.git`
-3. `cd provision-ubuntu-on-wsl2`
-4. `ansible-playbook playbook.yml -i inventory --ask-become-pass`
-5. Profit :smile:
+2. `ansible-galaxy install -r requirements.yml --force`
+3. `git clone https://github.com/worldofgeese/provision-ubuntu-on-wsl2.git`
+4. `cd provision-ubuntu-on-wsl2`
+5. `ansible-playbook playbook.yml -i inventory --ask-become-pass`
+6. Profit :smile:
 
 ## What is Installed?
 
