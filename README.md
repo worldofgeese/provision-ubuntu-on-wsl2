@@ -13,23 +13,15 @@ Intended to be re-runnable (idempotent) to maintain and update when required.
 1. Windows 10 or 11.
 1. WSL 2
 
-### Update the package lists
+### Update the package lists and install Ansible
 
-1. `sudo apt-get update`
+1. `sudo apt update && sudo apt install -y ansible`
 
 ### Clone and Run
-
-1. Install Ansible:
-```
-sudo apt update && \
-  sudo apt install software-properties-common && \
-  sudo add-apt-repository --yes --update ppa:ansible/ansible && \
-  sudo apt install ansible
-```
 2. `git clone https://github.com/worldofgeese/provision-ubuntu-on-wsl2.git`
 3. `cd provision-ubuntu-on-wsl2`
 4. `ansible-galaxy install -r requirements.yml --force`
-5. `ansible-playbook playbook.yml -i inventory --ask-become-pass`
+5. `ansible-playbook playbook.yml -i inventory --ask-become-pass -e '{"nix_flakes": true}'`
 6. `exit` then open a new shell to make Nix available to your environment
 7. Profit :smile:
 
