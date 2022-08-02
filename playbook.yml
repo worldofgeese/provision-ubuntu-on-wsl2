@@ -2,11 +2,6 @@
 - hosts: all
   connection: local
   
-  vars_prompt:
-    - name: username
-      prompt: What is your username?
-      private: no
-    
   roles:
     - role: ableton.nix
 
